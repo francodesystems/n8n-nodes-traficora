@@ -1,6 +1,6 @@
 {
   "name": "@francodesystems-npm/n8n-nodes-traficora",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "n8n community node for Traficora, the Spanish TMS (transport management software) built on Odoo: transport orders, trips with their margin, trip expenses, document expiries, vehicles and customers, plus a polling trigger. Uses the Odoo JSON-2 API of your own Traficora instance.",
   "keywords": [
     "n8n-community-node-package",
@@ -15,7 +15,7 @@
     "spain"
   ],
   "license": "MIT",
-  "homepage": "https://traficora.com/integraciones",
+  "homepage": "https://traficora.com/integraciones/n8n",
   "author": {
     "name": "Francodesystems",
     "email": "hola@francodesystems.com",

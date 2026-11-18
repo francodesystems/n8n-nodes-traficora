@@ -9,7 +9,7 @@ This is an [n8n](https://n8n.io) community node that lets you use **your Trafico
 
 It talks to the **Odoo JSON-2 API** (Odoo 19 and later) of your own instance. Nothing needs to be installed in Traficora.
 
-📖 **Integrations**: [traficora.com/integraciones](https://traficora.com/integraciones)
+📖 **Documentation**: [traficora.com/integraciones/n8n](https://traficora.com/integraciones/n8n)
 
 [Installation](#installation) · [Credentials](#credentials) · [Operations](#operations) · [Trigger](#trigger) · [Compatibility](#compatibility) · [Usage](#usage) · [Resources](#resources)
 

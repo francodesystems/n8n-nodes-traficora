@@ -16,9 +16,9 @@ Legend: ✅ done and checked · ⏳ needs Juan (account, network or publishing) 
 | MIT licence | ✅ | `LICENSE`, `license: "MIT"` |
 | No runtime dependencies | ✅ | No `dependencies`; only `devDependencies` and the `n8n-workflow` peer. Code imports only `n8n-workflow` |
 | `files` only ships `dist` | ✅ | Tarball: `dist/`, `package.json`, `README.md`, `LICENSE`, `index.js` (50 files, 41 kB) |
-| `homepage`, `author`, `repository`, `bugs` | ✅ | homepage `https://traficora.com/integraciones`; repository `github.com/francodesystems/n8n-nodes-traficora` (to be created) |
+| `homepage`, `author`, `repository`, `bugs` | ✅ | homepage `https://traficora.com/integraciones/n8n`; repository `github.com/francodesystems/n8n-nodes-traficora` |
 | `@n8n/node-cli` ≥ 0.23.0 as devDependency | ✅ | `^0.23.0` |
-| npm repository URL matches a public GitHub repo; same author/maintainer on npm and GitHub | ⏳ | The repo does not exist yet (step 1 below) |
+| npm repository URL matches a public GitHub repo; same author/maintainer on npm and GitHub | ✅ | Public repo `francodesystems/n8n-nodes-traficora`; published by npm user `francodesystems` |
 
 ## Code and lint
 
@@ -26,14 +26,14 @@ Legend: ✅ done and checked · ⏳ needs Juan (account, network or publishing) 
 |---|---|---|
 | TypeScript, n8n node conventions | ✅ | Programmatic action node + polling trigger |
 | `npm run lint` passes | ✅ | `eslint-plugin-n8n-nodes-base` + `@n8n/eslint-plugin-community-nodes` (n8n Cloud rules): 0 errors, 0 warnings |
-| `npx @n8n/scan-community-package` static analysis | ✅ (locally) | `npm run scan` (scanner v0.43.0 rule set) on the source and on the `npm pack` tarball: **both passed**. The real command also checks npm provenance, so it can only be run after step 3 |
+| `npx @n8n/scan-community-package` static analysis | ✅ | `npx @n8n/scan-community-package` on the published 0.1.0 (18 Nov 2026): provenance, source and analysis passed. Locally, `npm run scan` (scanner v0.43.0 rule set) on the source and on the `npm pack` tarball: **both passed**. The real command also checks npm provenance, so it can only be run after step 3 |
 | No env vars, no file system access | ✅ | No `process`, `fs`, `__dirname`; the base URL comes from the credential |
 | No restricted globals | ✅ | Enforced by `lint:cloud` and the scan |
 | Errors wrapped in `NodeApiError` / `NodeOperationError` with `itemIndex` | ✅ | Odoo's `{ name, message, arguments, debug }` becomes the message, plus the error class and a hint (expired key, missing module, no permission) in the description |
 | Continue On Fail and `pairedItem` | ✅ | Every output item carries `pairedItem: { item: i }` |
 | `usableAsTool` | ✅ | `true` on the action node, `false` on the trigger |
 | Icons: SVG, light and dark variants | ✅ | `traficora.svg` / `traficora.dark.svg`. ℹ️ Juan: have a look at both in the n8n editor before submitting |
-| Credential: password field, `test` request, documentation URL | ✅ | `apiKey` is `password`; test = `POST /json/2/res.users/context_get`; docs `https://traficora.com/integraciones` |
+| Credential: password field, `test` request, documentation URL | ✅ | `apiKey` is `password`; test = `POST /json/2/res.users/context_get`; docs `https://traficora.com/integraciones/n8n` |
 | Trigger: name ends in `Trigger`, `inputs: []`, polling with static data | ✅ | `polling: true`; `write_date` / `create_date` cursor with a lookback window; first run sets the cursor without emitting, manual run returns a sample |
 | English only (UI, errors, README) | ✅ | |
 | Unit tests | ✅ | `npm test`: 37 tests (`node:test`): body building, domains, Simplify, pagination, base URL normalisation, error parsing and the polling cursor |
@@ -58,7 +58,7 @@ Legend: ✅ done and checked · ⏳ needs Juan (account, network or publishing) 
 
 ## Publish and submit: exact steps for Juan
 
-Nothing below has been done. Each step goes out to GitHub, npm or n8n with your accounts.
+Steps 1–5 done on 18 Nov 2026 (0.1.0 with `NPM_TOKEN`, 0.1.1 through Trusted Publishing). Left: the functional test and step 6.
 
 1. **Create the public repo** (account `francodesystems`):
    ```bash

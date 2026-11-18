@@ -13,7 +13,7 @@ export class TraficoraApi implements ICredentialType {
 	icon = { light: 'file:traficora.svg', dark: 'file:traficora.dark.svg' } as const;
 
 	// eslint-disable-next-line n8n-nodes-base/cred-class-field-documentation-url-miscased
-	documentationUrl = 'https://traficora.com/integraciones';
+	documentationUrl = 'https://traficora.com/integraciones/n8n';
 
 	properties: INodeProperties[] = [
 		{
