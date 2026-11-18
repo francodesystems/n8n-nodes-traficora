@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+- Same as 0.1.1 (never published: its CI run could not authenticate through OIDC). The publish workflow no longer writes an `.npmrc` token, so npm uses the Trusted Publisher.
+
 ## 0.1.1
 
 - Homepage and credential documentation link point to the node's own page, https://traficora.com/integraciones/n8n.

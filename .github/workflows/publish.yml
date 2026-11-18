@@ -82,7 +82,6 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Upgrade npm
         # Trusted Publisher OIDC support was added in npm 11.5.1; the npm
@@ -97,10 +96,6 @@ jobs:
         # OIDC handshake exchanges the GitHub ID token (id-token: write at the
         # job level) for a short-lived npm publish credential, matched against
         # the Trusted Publisher configured on npmjs.com for this package.
-        # First release only: NPM_TOKEN (granular, short-lived) is set because
-        # npm cannot add a Trusted Publisher to a package that does not exist
-        # yet. After 0.1.0, the Trusted Publisher is configured and the secret
-        # is deleted; with it unset, NODE_AUTH_TOKEN is empty and OIDC is used.
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # No registry-url / NODE_AUTH_TOKEN: an .npmrc with an empty _authToken
+        # stops npm from using the OIDC Trusted Publisher (ENEEDAUTH).
         run: npm publish --provenance --access public
