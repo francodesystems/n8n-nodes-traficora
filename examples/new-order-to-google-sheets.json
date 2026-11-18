@@ -1,0 +1,96 @@
+{
+  "name": "Traficora: new orders to Google Sheets",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 5,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "event": "newOrder",
+        "simple": true
+      },
+      "name": "New order in Traficora",
+      "type": "@francodesystems-npm/n8n-nodes-traficora.traficoraTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "credentials": {
+        "traficoraApi": {
+          "id": "",
+          "name": "Traficora API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_SHEET_ID/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Orders"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Reference": "={{ $json.name }}",
+            "Customer": "={{ $json.partner_name }}",
+            "Customer reference": "={{ $json.client_ref }}",
+            "Load": "={{ $json.origin_address }}",
+            "Load date": "={{ $json.date_load ? DateTime.fromISO($json.date_load).setZone($workflow.timezone).toFormat('dd/MM/yyyy HH:mm') : '' }}",
+            "Unload": "={{ $json.dest_address }}",
+            "Goods": "={{ $json.goods_description }}",
+            "Weight (kg)": "={{ $json.weight_kg }}",
+            "Price": "={{ $json.price }}",
+            "State": "={{ $json.state }}",
+            "Traficora ID": "={{ $json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "name": "Append to the Orders sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        260,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "New order in Traficora": {
+      "main": [
+        [
+          {
+            "node": "Append to the Orders sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

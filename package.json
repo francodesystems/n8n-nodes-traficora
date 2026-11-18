@@ -1,0 +1,79 @@
+{
+  "name": "@francodesystems-npm/n8n-nodes-traficora",
+  "version": "0.1.0",
+  "description": "n8n community node for Traficora, the Spanish TMS (transport management software) built on Odoo: transport orders, trips with their margin, trip expenses, document expiries, vehicles and customers, plus a polling trigger. Uses the Odoo JSON-2 API of your own Traficora instance.",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "traficora",
+    "tms",
+    "transport",
+    "logistics",
+    "odoo",
+    "fleet",
+    "trucking",
+    "spain"
+  ],
+  "license": "MIT",
+  "homepage": "https://traficora.com/integraciones",
+  "author": {
+    "name": "Francodesystems",
+    "email": "hola@francodesystems.com",
+    "url": "https://traficora.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francodesystems/n8n-nodes-traficora.git"
+  },
+  "bugs": {
+    "url": "https://github.com/francodesystems/n8n-nodes-traficora/issues"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials test --write",
+    "lint": "eslint nodes credentials package.json && npm run lint:cloud",
+    "lint:cloud": "ESLINT_USE_FLAT_CONFIG=true eslint -c eslint.cloud.config.mjs nodes credentials",
+    "lintfix": "eslint nodes credentials package.json --fix",
+    "test": "npm run build && node --test test/*.test.js",
+    "release": "n8n-node release",
+    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json && node --test test/*.test.js && node scripts/scan-local.mjs",
+    "scan": "npm run build && node scripts/scan-local.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/TraficoraApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Traficora/Traficora.node.js",
+      "dist/nodes/Traficora/TraficoraTrigger.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/eslint-plugin-community-nodes": "^0.9.0",
+    "@n8n/node-cli": "^0.23.0",
+    "@types/node": "^20.19.43",
+    "@typescript-eslint/parser": "~8.32.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-n8n-nodes-base": "^1.16.3",
+    "gulp": "^5.0.0",
+    "n8n-workflow": "*",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}

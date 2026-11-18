@@ -1,0 +1,147 @@
+{
+  "name": "Traficora: daily expiring documents alert",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "name": "Every day at 7:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "expiry",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "withinDays": 30,
+          "activeHolders": true
+        },
+        "simple": true,
+        "options": {}
+      },
+      "name": "Documents expiring in 30 days",
+      "type": "@francodesystems-npm/n8n-nodes-traficora.traficora",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "traficoraApi": {
+          "id": "",
+          "name": "Traficora API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// One message with every document expiring in the next 30 days (or already expired).\nconst docs = $input.all().map((item) => item.json);\nif (!docs.length) return [];\nconst lines = docs\n  .sort((a, b) => a.days_left - b.days_left)\n  .map((d) => {\n    const holder = d.vehicle_name || d.partner_name || '';\n    const when = d.days_left < 0 ? `EXPIRED ${-d.days_left} days ago` : d.days_left === 0 ? 'expires TODAY' : `expires in ${d.days_left} days`;\n    return `• ${d.type_name} · ${holder}${d.number ? ' (' + d.number + ')' : ''}: ${d.date_expiry}, ${when}`;\n  });\nreturn [{ json: { count: docs.length, subject: `Traficora: ${docs.length} document(s) expiring`, text: lines.join('\\n') } }];"
+      },
+      "name": "Build the message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "traficora@example.com",
+        "toEmail": "trafico@example.com",
+        "subject": "={{ $json.subject }}",
+        "emailFormat": "text",
+        "text": "={{ $json.text }}",
+        "options": {}
+      },
+      "name": "Email the traffic office",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        660,
+        -100
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-1000000000000",
+        "text": "={{ $json.subject }}\n\n{{ $json.text }}",
+        "additionalFields": {}
+      },
+      "name": "Telegram the group",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        660,
+        100
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every day at 7:00": {
+      "main": [
+        [
+          {
+            "node": "Documents expiring in 30 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Documents expiring in 30 days": {
+      "main": [
+        [
+          {
+            "node": "Build the message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build the message": {
+      "main": [
+        [
+          {
+            "node": "Email the traffic office",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegram the group",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
